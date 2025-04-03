@@ -1,7 +1,8 @@
 import textwrap
-from typing import Literal
+from typing import Literal, cast
 from kagiapi import KagiClient
 from concurrent.futures import ThreadPoolExecutor
+import os
 
 from mcp.server.fastmcp import FastMCP
 from pydantic import Field
@@ -95,9 +96,19 @@ def kagi_summarizer(
         if not url:
             raise ValueError("Summarizer called with no URL.")
 
+        engine = os.environ.get("KAGI_SUMMARIZER_ENGINE", "cecil")
+
+        valid_engines = {"cecil", "agnes", "daphne", "muriel"}
+        if engine not in valid_engines:
+            raise ValueError(
+                f"Summarizer configured incorrectly, invalid summarization engine set: {engine}. Must be one of the following: {valid_engines}"
+            )
+
+        engine = cast(Literal["cecil", "agnes", "daphne", "muriel"], engine)
+
         summary = kagi_client.summarize(
             url,
-            engine="cecil",
+            engine=engine,
             summary_type=summary_type,
             target_language=target_language,
         )["data"]["output"]
