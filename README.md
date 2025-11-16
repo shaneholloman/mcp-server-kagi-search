@@ -173,3 +173,4 @@ Then access MCP Inspector at `http://localhost:5173`. You may need to add your K
 - Summarizer engine can be customized using the `KAGI_SUMMARIZER_ENGINE` environment variable (e.g. `KAGI_SUMMARIZER_ENGINE="daphne"`)
   - Learn about the different summarization engines [here](https://help.kagi.com/kagi/api/summarizer.html#summarization-engines)
 - There may be more secure ways of plugging into the MCP. A user wrote down some details [here](https://github.com/lardinator/kagimcp/blob/main/docs/secure-api-key-storage.md)
+- The `--http` cli option can be used to toggle streamable HTTP transport on. Can use along with `--port` and `--host` args.

@@ -2,12 +2,24 @@ import textwrap
 from typing import Literal, cast
 import os
 from concurrent.futures import ThreadPoolExecutor
+import argparse
 
 from kagiapi import KagiClient
 from kagiapi.models import SearchResponse
 from mcp.server.fastmcp import FastMCP
 from pydantic import Field
 
+parser = argparse.ArgumentParser(description="Kagi MCP Server")
+parser.add_argument(
+    "--http", action="store_true", help="Use HTTP transport instead of stdio"
+)
+parser.add_argument(
+    "--host", default="0.0.0.0", help="Host to bind to (default: 0.0.0.0)"
+)
+parser.add_argument(
+    "--port", type=int, default=8000, help="Port to listen on (default: 8000)"
+)
+args = parser.parse_args()
 
 kagi_client = KagiClient()
 mcp = FastMCP("kagimcp", dependencies=["kagiapi", "mcp[cli]"])
@@ -133,7 +145,13 @@ def kagi_summarizer(
 
 
 def main():
-    mcp.run()
+    if args.http:
+        mcp.settings.host = args.host
+        mcp.settings.port = args.port
+        mcp.run("streamable-http")
+
+    else:
+        mcp.run()  # default stdio mode
 
 
 if __name__ == "__main__":
