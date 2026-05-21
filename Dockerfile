@@ -7,7 +7,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-RUN pip install kagimcp==1.0.0rc4
+RUN pip install kagimcp==1.0.0
 
 ENV PORT=8000
 EXPOSE 8000
