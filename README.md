@@ -38,6 +38,20 @@ Codex writes MCP configuration to `~/.codex/config.toml`.
 
 ### Claude Desktop
 
+Install uv first.
+
+MacOS/Linux:
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+Windows:
+```
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+Then in your Claude Desktop config (found through Settings -> Developer -> Edit Config):
+
 ```json
 {
   "mcpServers": {
