@@ -9,6 +9,20 @@ An MCP server backed by the [Kagi API](https://help.kagi.com/kagi/api/overview.h
 
 > **Note:** The previous `kagi_fastgpt` and `kagi_summarizer` tools have been removed. Both are planned to return in a future release.
 
+## Hosted Server
+
+We run a hosted MCP server at **`https://mcp.kagi.com/mcp`** — no install required. Point any HTTP-capable MCP client at it and authenticate with your Kagi API key.
+
+OAuth2 isn't supported yet (it's on our roadmap), so for now grab your [API key from the dashboard](https://kagi.com/api/keys) and pass it via `Bearer` HTTP authentication.
+
+Example with Claude Code:
+
+```bash
+claude mcp add kagi https://mcp.kagi.com/mcp --transport http --header "Authorization: Bearer $(read -sp 'API key: ' k; echo $k)" --scope user
+```
+
+Prefer to run it yourself? See [Client Setup](#client-setup) for the local `uvx` install, or [Self-Hosting](#self-hosting) to host the HTTP server on your own infrastructure.
+
 ## Requirements
 
 - A Kagi API key in `KAGI_API_KEY`.
