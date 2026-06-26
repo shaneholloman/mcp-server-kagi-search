@@ -27,6 +27,12 @@ from fastmcp.server.transforms.tool_transform import ToolTransform
 from fastmcp.tools.tool_transform import ArgTransformConfig, ToolTransformConfig
 from pydantic import Field
 from functools import lru_cache
+from importlib.metadata import PackageNotFoundError, version
+
+try:
+    _USER_AGENT = f"KagiMCP/{version('kagimcp')}"
+except PackageNotFoundError:
+    _USER_AGENT = "KagiMCP"
 
 # Optional fallback for stdio / single-tenant use. In HTTP mode the key is read
 # per-request from the Authorization header instead.
@@ -103,6 +109,7 @@ def _clients_for(key: str) -> tuple[SearchApi, ExtractApi]:
         raise_on_status=False,
     )
     api_client = ApiClient(config)
+    api_client.user_agent = _USER_AGENT
     return SearchApi(api_client), ExtractApi(api_client)
 
 
