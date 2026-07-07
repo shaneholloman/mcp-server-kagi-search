@@ -38,6 +38,9 @@ except PackageNotFoundError:
 # per-request from the Authorization header instead.
 _api_key_env = os.environ.get("KAGI_API_KEY")
 
+# Optional base-URL override
+_api_host = os.environ.get("KAGI_API_HOST", "").strip() or None
+
 
 def _timeout_from_env(name: str, default: float) -> float:
     raw = os.environ.get(name, "").strip()
@@ -72,6 +75,7 @@ def _max_retries_from_env() -> int:
 _MAX_RETRIES = _max_retries_from_env()
 _RETRY_STATUSES = frozenset({429, 500, 502, 503, 504})
 
+
 class _KagiKeyPassthroughVerifier(TokenVerifier):
     """Accepts any non-empty bearer token; Kagi itself validates the key."""
 
@@ -98,7 +102,7 @@ def _resolve_api_key() -> str:
 
 @lru_cache(maxsize=128)
 def _clients_for(key: str) -> tuple[SearchApi, ExtractApi]:
-    config = Configuration(access_token=key)
+    config = Configuration(access_token=key, host=_api_host)
     config.retries = Retry(
         total=_MAX_RETRIES,
         backoff_factor=0.5,
